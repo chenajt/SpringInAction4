@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	<bean id="duke" class="com.silence.forest.FitBen.Juggler"></bean>
+
+	<bean id="poticDuck" class="com.silence.forest.FitBen.PoeticJuggler">
+		<constructor-arg value="15"></constructor-arg>
+		<constructor-arg ref="sonnet29"></constructor-arg>
+	</bean>
+
+	<bean id="sonnet29" class="com.silence.forest.FitBen.Sonnet29">
+	</bean>
+
+	<bean id="theStage" class="com.silence.forest.FitBen.Stage">
+	</bean>
+
+	<bean id="auditorium" class="com.silence.forest.FitBen.Auditorium"
+		init-method="turnOnLights" destroy-method="turnOffLights">
+	</bean>
+
+	<bean id="kenny" class="com.silence.forest.FitBen.Instrumentalist">
+		<property name="song" value="Jingle Bells"></property>
+	</bean>
+
+	<bean id="piano" class="com.silence.forest.FitBen.Piano"></bean>
+	<bean id="saxophone" class="com.silence.forest.FitBen.Saxophone"></bean>
+
+	<bean id="kenny3" class="com.silence.forest.FitBen.Instrumentalist">
+		<property name="song" value="Summertrain" />
+		<property name="instrument">
+			<bean class="com.silence.forest.FitBen.Saxophone"></bean>
+		</property>
+	</bean>
+
+	<bean id="hank" class="com.silence.forest.FitBen.OneManBand">
+		<property name="instruments">
+			<list>
+				<ref bean="saxophone"></ref>
+				<ref bean="piano"></ref>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hank2" class="com.silence.forest.FitBen.OneManBand2">
+		<property name="instruments">
+			<map>
+				<entry key="SAXOPHONE" value-ref="saxophone"></entry>
+				<entry key="PIANO" value-ref="piano"></entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="song1" class="com.silence.forest.FitBen.Instrumentalist">
+		<property name="song" value="#{kenny.song}"></property>
+	</bean>
+
+	<bean id="songSelector" class="com.silence.forest.FitBen.SongSelector"></bean>
+
+	<bean id="song2" class="com.silence.forest.FitBen.Instrumentalist">
+		<property name="song" value="#{songSelector.selectSong().toUpperCase()}"></property>
+	</bean>
+
+	<util:list id="cities">
+		<bean class="com.silence.forest.FitBen.City">
+			<property name="name" value="Hubei"></property>
+			<property name="state" value="Wuhan"></property>
+			<property name="population" value="2323231"></property>
+		</bean>
+		<bean class="com.silence.forest.FitBen.City">
+			<property name="name" value="Shanghai"></property>
+			<property name="state" value="Shanghai"></property>
+			<property name="population" value="666662"></property>
+		</bean>
+	</util:list>
+
+	<util:list id="songList">
+		<bean class="com.silence.forest.FitBen.Song">
+			<constructor-arg value="That Old Black Magic"></constructor-arg>
+			<constructor-arg value="Arlen and Mercer"></constructor-arg>
+			<constructor-arg value="That old black magic has me in its spell..."></constructor-arg>
+		</bean>
+		<bean class="com.silence.forest.FitBen.Song">
+			<constructor-arg value="Magic Carpet Ride"></constructor-arg>
+			<constructor-arg value="Moreve and Kay"></constructor-arg>
+			<constructor-arg value="I like to dream yes, yes, right between my sound machine..."></constructor-arg>
+		</bean>
+	</util:list>
+
+	<!-- 把songList列表中所有的title提取出来 -->
+	<bean id="magicSongBook" class="com.silence.forest.FitBen.SongBook">
+		<constructor-arg value="#{songList.![title]}"></constructor-arg>
+	</bean>
+	
+	<bean id="ricky" class="com.silence.forest.FitBen.Instrumentalist">
+		<property name="song" value="#{magicSongBook.pickASong()}"></property>
+		<property name="instrument">
+			<bean class="com.silence.forest.FitBen.Saxophone"></bean>
+		</property>
+	</bean>
+</beans>
